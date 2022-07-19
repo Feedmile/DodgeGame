@@ -38,6 +38,33 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Ground_Back_2
+    uniqueID: 3343690653
+    locked: 0
+  - name: Fog_Back_2
+    uniqueID: 96581387
+    locked: 0
+  - name: Ground_Back_1
+    uniqueID: 1140419911
+    locked: 0
+  - name: Fog_Back_1
+    uniqueID: 1429728769
+    locked: 0
+  - name: Ground
+    uniqueID: 2368626033
+    locked: 0
+  - name: Fog_Front_1
+    uniqueID: 1992785861
+    locked: 0
+  - name: Ground_Front_1
+    uniqueID: 1140928503
+    locked: 0
+  - name: Fog_Front_2
+    uniqueID: 2517798493
+    locked: 0
+  - name: Ground_Front_2
+    uniqueID: 2678688547
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
