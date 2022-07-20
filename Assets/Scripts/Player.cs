@@ -14,7 +14,6 @@ public class Player : MonoBehaviour
     public bool _isWaiting;
     [Header("Movement Values")]
     [SerializeField] private float _movementAcceleration = 75f;
-
     [SerializeField] private float _maxMovementSpeed = 5f;
     private bool _canMove => !_isWaiting && !_canWallSlide;
     private bool _isMoving => _horizontalDirection != 0;
@@ -60,8 +59,7 @@ public class Player : MonoBehaviour
     }
     // Start is called before the first frame update
     void Start()
-    {
-        
+    {    
         _rb = GetComponent<Rigidbody2D>();
         _anim = GetComponent<Animator>();
         _attackArea = transform.GetChild(0).gameObject;
@@ -73,27 +71,20 @@ public class Player : MonoBehaviour
         _horizontalDirection = GetInput().x;
         _verticalDirection = GetInput().y;
         if (_canJump) Jump(Vector2.up);
-
-        if(Input.GetButtonDown("Jump") && _onWall) StartCoroutine(WallJump());
+        if(_onWall) StartCoroutine(WallJump());
         if (_canAttack)Attack();
         if (_canDash) StartCoroutine(Dash(_horizontalDirection));
-        if (_canWallSlide) WallSlide();
-      
+        //if (_canWallSlide) WallSlide();
     }
     private void FixedUpdate()
     {
-       
         CheckCollisions();
-        ApplyLinearDrag();
-        Debug.Log(" Attack" + _isAttacking);
-        Debug.Log("move" + _canMove);
-        if (_canMove) MoveCharacter();
-        
+        ApplyLinearDrag();  
+        if (_canMove) MoveCharacter();      
         if (_onGround)
         {
             _extraJumps = 1;
-        }
-        
+        }   
         //Animation
         Animation();
         _anim.SetBool("onGround", _onGround);
@@ -103,18 +94,10 @@ public class Player : MonoBehaviour
         _anim.SetBool("isDashing", _isDashing);
         _anim.SetBool("canWallSlide", _canWallSlide);
         _anim.SetBool("isAttacking", _isAttacking);
-
-
     }
-   
-
-    
     private void Animation()
     {
-        if ((_horizontalDirection < 0f && _facingRight || _horizontalDirection > 0f && !_facingRight) &&!_canWallSlide)
-        {
-            Flip();
-        }
+        if ((_horizontalDirection < 0f && _facingRight || _horizontalDirection > 0f && !_facingRight) &&!_canWallSlide) Flip();
     }
     //////////////////////////////////////////////////////////////Animtions//////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////Animtions_END//////////////////////////////////////////////////////////////////////
@@ -132,44 +115,35 @@ public class Player : MonoBehaviour
             _isAttacking = true;
             _rb.velocity = new Vector2(_horizontalDirection, 0f);
         }
-        
-
-
     }
     
     private void MoveCharacter()
-    {
-        
+    {      
         _rb.AddForce(new Vector2(_horizontalDirection, 0f) * _movementAcceleration);
         if(Mathf.Abs(_rb.velocity.x) > _maxMovementSpeed) _rb.velocity = new Vector2(Mathf.Sign(_rb.velocity.x)*_maxMovementSpeed,_rb.velocity.y);
     }
     private void Jump(Vector2 direction)
-    {
-        
+    {     
         if (!_onGround && !_onWall) _extraJumps--;
         _rb.velocity = new Vector2(_rb.velocity.x, 0f);
         _rb.AddForce(direction * _jumpForce, ForceMode2D.Impulse);
     }
     private IEnumerator WallJump()
     {
-
-
         float jumpTime = Time.time;
-        Vector2 jumpDirection = _onRightWall ? Vector2.left : Vector2.right;
-        Jump((Vector2.up *1.3f + jumpDirection));
+        _rb.velocity = new Vector2(0f, 0f);
+        Vector2 jumpDirection = _onRightWall ? Vector2.left : Vector2.right;      
+        Jump(Vector2.up *1.3f + jumpDirection);
         Flip();
         while (Time.time < jumpTime + 0.3f)
         {
             _isWaiting = true;
-            yield return null;
-            
+            yield return null;          
             if (_onGround)
             {
                 _isWaiting = false;
-                yield break;
-              
+                yield break;     
             }
-
         }
         _isWaiting = false;
     }
@@ -195,22 +169,13 @@ public class Player : MonoBehaviour
         _isWaiting = false;
         if(_onGround)Jump(Vector2.up/1.5f);
     }
-    
-    
-
-    
     /////////////////////////////////////////////////////////////Player_Controls-END///////////////////////////////////////////////////////////////
     //-------------------------------------------------------------------------------------------------------------------------------------------//
     //////////////////////////////////////////////////////////Player_Enviroment_Physics///////////////////////////////////////////////////////////
     private void Flip()
     {
-
-        
             _facingRight = !_facingRight;
             transform.Rotate(0f, 180f, 0f);
-        
-
-
     }
  
     private void ApplyLinearDrag()
@@ -234,9 +199,7 @@ public class Player : MonoBehaviour
     {
         if(_onWall && !_facingRight && !_onRightWall) Flip();
         else if(_onWall && _facingRight && _onRightWall) Flip();
-        _rb.velocity = new Vector2(_rb.velocity.x, -_maxMovementSpeed);
-       
-        
+        _rb.velocity = new Vector2(_rb.velocity.x, -_maxMovementSpeed);    
     }
     private void FallMultiplier()
     {
@@ -250,10 +213,8 @@ public class Player : MonoBehaviour
                     Physics2D.Raycast(transform.position - _groundRaycastOffset, Vector2.down, _groundRaycastLength, _groundLayer);
         _onWall = Physics2D.Raycast(transform.position, Vector2.right, _wallRaycastLength, _wallLayer) ||
                   Physics2D.Raycast(transform.position, Vector2.left, _wallRaycastLength, _wallLayer);
-        _onRightWall = Physics2D.Raycast(transform.position, Vector2.right, _wallRaycastLength, _wallLayer);
-        
+        _onRightWall = Physics2D.Raycast(transform.position, Vector2.right, _wallRaycastLength, _wallLayer);  
     }
-
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
