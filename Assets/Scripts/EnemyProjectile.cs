@@ -17,14 +17,14 @@ public class EnemyProjectile : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
         
     }
     private void FixedUpdate()
     {
-        transform.position = Vector2.MoveTowards(transform.position, targetPosition * 2, speed * Time.deltaTime);
+        Vector2 toTarget = (targetPosition - transform.position).normalized;
+        rb.AddForce(toTarget * speed,ForceMode2D.Force);
         
-
+        
 
 
 
