@@ -4,30 +4,34 @@ using UnityEngine;
 
 public class EnemyProjectile : MonoBehaviour
 {
+    Vector2 toTarget;
     Vector3 targetPosition;
     private Rigidbody2D rb;
     public float speed;
+    private Animator anim;
+    private bool isActive = true;
+
+
     // Start is called before the first frame update
+
     void Start()
     {
+        
         targetPosition = FindObjectOfType<Player>().transform.position;
+        anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        toTarget = (targetPosition - transform.position).normalized;
     }
 
     // Update is called once per frame
     void Update()
     {
         
+        anim.SetBool("isActive", isActive);
     }
     private void FixedUpdate()
     {
-        Vector2 toTarget = (targetPosition - transform.position).normalized;
-        rb.AddForce(toTarget * speed,ForceMode2D.Force);
-        
-        
-
-
-
+        rb.AddForce(toTarget, ForceMode2D.Impulse);
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {

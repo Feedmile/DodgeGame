@@ -80,11 +80,10 @@ public class Player : MonoBehaviour
     {
         CheckCollisions();
         ApplyLinearDrag();  
-        if (_canMove) MoveCharacter();      
-        if (_onGround)
-        {
+        if (_canMove) MoveCharacter();
+        
+        if (_onGround) 
             _extraJumps = 1;
-        }   
         //Animation
         Animation();
         _anim.SetBool("onGround", _onGround);
@@ -125,6 +124,8 @@ public class Player : MonoBehaviour
     private void Jump(Vector2 direction)
     {     
         if (!_onGround && !_onWall) _extraJumps--;
+        _rb.gravityScale = 1f;
+        _rb.velocity = new Vector2(0f, 0f);
         _rb.velocity = new Vector2(_rb.velocity.x, 0f);
         _rb.AddForce(direction * _jumpForce, ForceMode2D.Impulse);
     }
