@@ -29,8 +29,9 @@ public class Enemy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
         target = GameObject.FindWithTag("Player");
+        rb = GetComponent<Rigidbody2D>();
+        
     }
 
     // Update is called once per frame
@@ -48,7 +49,8 @@ public class Enemy : MonoBehaviour
         if (Time.time > nextShotTime)
         {
             var toTarget = target.transform.position - transform.position;
-            Instantiate(projectile, target.transform.position, transform.rotation );
+            float angle = Mathf.Atan2(toTarget.y,toTarget.x) *Mathf.Rad2Deg;
+            Instantiate(projectile, transform.position,Quaternion.Euler(0,0,angle));
             nextShotTime = Time.time + timeBetweenShots;
         }
          if(!wait && !isHit)StartCoroutine(EnemyLogic());

@@ -20,7 +20,9 @@ public class EnemyProjectile : MonoBehaviour
         targetPosition = FindObjectOfType<Player>().transform.position;
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
-        toTarget = (targetPosition - transform.position).normalized;
+        toTarget = targetPosition - transform.position;
+
+
     }
 
     // Update is called once per frame
@@ -28,6 +30,7 @@ public class EnemyProjectile : MonoBehaviour
     {
         
         anim.SetBool("isActive", isActive);
+        
     }
     private void FixedUpdate()
     {
@@ -37,5 +40,10 @@ public class EnemyProjectile : MonoBehaviour
     {
         Destroy(gameObject);
         Debug.Log("should be destroyed");
+    }
+    private void SeekAndDestroy()
+    {
+     
+        
     }
 }

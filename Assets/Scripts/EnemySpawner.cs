@@ -14,13 +14,15 @@ public class EnemySpawner : MonoBehaviour
     void Start()
     {
         
+            
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        
-        if(!wait)StartCoroutine(SpawnEnemy(enemyPrefab));
+       if(!wait) StartCoroutine(SpawnEnemy(enemyPrefab));
+
     }
 
     private IEnumerator  SpawnEnemy(GameObject enemy)
